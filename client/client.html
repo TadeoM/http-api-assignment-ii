@@ -1,37 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>Our simple HTTP server</title>
-  <link rel="stylesheet" type="text/css" href="/style.css">
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
-  <script type="text/babel">
+    <title>Our simple HTTP server</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script type="text/babel">
+        let getUserForm = '';
+        let addUserForm = '';
+
+        // so this takes whatever xhr we got from sendajax, and then interprets it
+        // what does the JSON.parse do, does it call something in the other js files?
+        // maybe sendAjax is what calls my jsonResponses, and the xhr is just the return from the jsonResponses
+        const handleResponse = (xhr) => {
+            const content = document.querySelector('#content');
+            
+            console.log(pageSelected)
+            let obj = '';
+            if(typeSelected !== 'text/xml'){
+                obj = JSON.parse(xhr.response);
+            }
+            
+            switch (xhr.status){
+                case 200:
+                    content.innerHTML = '<b>Success</b>'
+                    break;
+                case 400:
+                    content.innerHTML = '<b>Bad Request</b>';
+                    break;
+                case 401:
+                    content.innerHTML = '<b>Unauthorized</b>'
+                    break;
+                case 403:
+                    content.innerHTML = '<b>Forbidden</b>'
+                    break;                
+                case 404:
+                    content.innerHTML = '<b>Resource Not Found</b>'
+                    break;
+                case 500:
+                    content.innerHTML = '<b>Internal Error</b>'
+                    break;
+                default:
+                    content.innerHTML = '<p>Status code not implemented by client</p>'
+                    break;
+            }
+            
+            if (obj.message){
+                content.innerHTML += `<p>Message: ${obj.message}</p>`;
+                console.dir(obj);
+            }
+            else if (typeSelected === 'text/xml'){
+                const message = xhr.responseXML.querySelector('message').textContent;
+                console.dir(xhr.responseXML.querySelector('message'));
+                content.innerHTML += `<p>Message: ${message}`
+            }
+        };
+
+        const getAjax = (url, type) => {
+            const xhr = new XMLHttpRequest(); 
+            xhr.open(type, url);   
+            xhr.setRequestHeader ("Accept", 'type/JSON');    
+
+            xhr.onload = () => handleResponse(xhr);
+
+            xhr.send();
+        };
+
+        const init = () =>{            
+            const getButton = document.querySelector('#nameForm')[2];
+            const addButton = document.querySelector('#userForm')[2];
+            console.dir(addButton);
+            
+            getButton.addEventListener('click', () => 
+            {
+                getUserForm = document.querySelector('#userForm');
+                sendAjax(pageSelected, 'GET');
+            });
+            
+            addButton.addEventListener('click', () => 
+            {
+                addUserForm = document.querySelector('#nameForm');
+                sendAjax(pageSelected, 'POST');
+            });
+        };
+
+        window.onload = init;
 
   </script>
 </head>
+
 <body>
-  <section id="top">
-    <h3>POST Status Code Tests</h3>
-    <form id="nameForm" action="/addUser" method="post">
-      <label for="name">Name: </label>
-      <input id="nameField" type="text" name="name" />
-      <label for="age">Age: </label>
-      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
-      <input type="submit" value="Add User" />
-    </form>
-    <form id="userForm" action="/getUsers" method="get">
-      <select id='urlField'>
-        <option value='/getUsers'>/getUsers</option>
-        <option value='/notReal'>/notReal</option>
-      </select>
-      <select id="methodSelect">
-        <option value="get">GET</option>
-        <option value="head">HEAD</option>
-      </select>
-      <input type="submit" value="Get User" />
-    </form>
-  </section>
-  <section id="content">
-  </section>
+    <section id="top">
+        <h3>POST Status Code Tests</h3>
+        <form id="nameForm" action="/addUser" method="post">
+            <label for="name">Name: </label>
+            <input id="nameField" type="text" name="name" />
+            <label for="age">Age: </label>
+            <input id="ageField" type="number" name="age" min="0" max="100" step="1" />
+            <input type="submit" value="Add User" />
+        </form>
+        <form id="userForm" action="/getUsers" method="get">
+            <select id='urlField'>
+                <option value='/getUsers'>/getUsers</option>
+                <option value='/notReal'>/notReal</option>
+            </select>
+            <select id="methodSelect">
+                <option value="get">GET</option>
+                <option value="head">HEAD</option>
+            </select>
+            <input type="submit" value="Get User" />
+        </form>
+    </section>
+    <section id="content">
+    </section>
 </body>
+
 </html>
