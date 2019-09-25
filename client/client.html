@@ -16,11 +16,7 @@
         const handleResponse = (xhr) => {
             const content = document.querySelector('#content');
             
-            console.log(pageSelected)
-            let obj = '';
-            if(typeSelected !== 'text/xml'){
-                obj = JSON.parse(xhr.response);
-            }
+            let obj = JSON.parse(xhr.response);
             
             switch (xhr.status){
                 case 200:
@@ -50,11 +46,6 @@
                 content.innerHTML += `<p>Message: ${obj.message}</p>`;
                 console.dir(obj);
             }
-            else if (typeSelected === 'text/xml'){
-                const message = xhr.responseXML.querySelector('message').textContent;
-                console.dir(xhr.responseXML.querySelector('message'));
-                content.innerHTML += `<p>Message: ${message}`
-            }
         };
 
         const getAjax = (url, type) => {
@@ -70,12 +61,12 @@
         const init = () =>{            
             const getButton = document.querySelector('#nameForm')[2];
             const addButton = document.querySelector('#userForm')[2];
-            console.dir(addButton);
+            
             
             getButton.addEventListener('click', () => 
             {
                 getUserForm = document.querySelector('#userForm');
-                sendAjax(pageSelected, 'GET');
+                sendAjax(pageSelected, getUserForm[1].value);
             });
             
             addButton.addEventListener('click', () => 

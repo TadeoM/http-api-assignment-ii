@@ -11,17 +11,23 @@ const urlStruct = {
     'GET': {
         '/': htmlHandler.getIndex,
         '/style.css': htmlHandler.getCSS,
-        '/success': jsonHandler.success,
+        /*'/success': jsonHandler.success,
         '/badRequest': jsonHandler.badRequest,
         '/unauthorized': jsonHandler.unauthorized,
         '/forbidden': jsonHandler.forbidden,
         '/internal': jsonHandler.internal,
-        '/notImplemented': jsonHandler.notImplemented,
+        '/notImplemented': jsonHandler.notImplemented,*/
+        '/getUsers': jsonHandler.getUsers,
+        '/notReal': jsonHandler.notReal,
         notFound: jsonHandler.notFound,
     },
     'HEAD': {
-        //'/getUsers': jsonHandler.getUsersMeta,
+        '/getUsers': jsonHandler.getUsersMeta,
+        '/notRealMeta': jsonHandler.notRealMeta,
         notFound: jsonHandler.notFound,
+    },
+    'POST': {
+        '/addUser': jsonHandler.addUser,
     },
 };
 
