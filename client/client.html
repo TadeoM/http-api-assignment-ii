@@ -50,7 +50,7 @@
 
         const getAjax = (url, type) => {
             const xhr = new XMLHttpRequest(); 
-            xhr.open(type, url);   
+            xhr.open(type, url); 
             xhr.setRequestHeader ("Accept", 'type/JSON');    
 
             xhr.onload = () => handleResponse(xhr);

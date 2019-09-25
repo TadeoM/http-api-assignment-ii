@@ -49,7 +49,7 @@ const addUser = (request, response, params) => {
     }
     if (!params.name || !param.age) {
         responseJSON.message = 'Missing params name and/or age.';
-        return respondJSON(request, response, 400);
+        return respondJSON(request, response, 400, responseJSON.message);
     }
 
     const newUser = {
@@ -68,7 +68,7 @@ const addUser = (request, response, params) => {
     users[users.indexOf(name)].name = newUser.name;
     users[users.indexOf(name)].age = newUser.age;
 
-    return respondJSON(request, response, 201, responseJSON);
+    return respondJSON(request, response, 201, newUser);
 };
 
 
