@@ -32,14 +32,53 @@ const urlStruct = {
 
 const onRequest = (request, response) => {
     const parsedUrl = url.parse(request.url);
-    const params = query.parse(parsedUrl.query);
-    console.dir(params);
 
-    if (urlStruct[request.method][parsedUrl.pathname]){
-        urlStruct[request.method][parsedUrl.pathname](request,response, params);
-    } else {
+    if (request.method === 'POST'){
+        handlePost(request, response, parsedUrl)
+    } else if (urlStruct[request.method][parsedUrl.pathname]){
+        urlStruct[request.method][parsedUrl.pathname](request,response);
+    }
+    else {
         urlStruct['HEAD'].notFound(request, response);
     }
+};
+
+const handlePost = (request, response, parsedUrl) => {
+  //if post is to /addUser (our only POST url)
+  if (parsedUrl.pathname === '/addUser') {
+    const res = response;
+
+    //uploads come in as a byte stream that we need 
+    //to reassemble once it's all arrived
+    const body = [];
+
+    //if the upload stream errors out, just throw a
+    //a bad request and send it back 
+    request.on('error', (err) => {
+      console.dir(err);
+      res.statusCode = 400;
+      res.end();
+    });
+
+    //on 'data' is for each byte of data that comes in
+    //from the upload. We will add it to our byte array.
+    request.on('data', (chunk) => {
+      body.push(chunk); 
+    });
+
+    //on end of upload stream. 
+    request.on('end', () => {
+      //combine our byte array (using Buffer.concat)
+      //and convert it to a string value (in this instance)
+      const bodyString = Buffer.concat(body).toString();
+      //since we are getting x-www-form-urlencoded data
+      //the format will be the same as querystrings
+      //Parse the string into an object by field name
+      const bodyParams = query.parse(bodyString);
+      //pass to our addUser function
+      jsonHandler.addUser(request, res, bodyParams);
+    });
+  }
 };
 
 http.createServer(onRequest).listen(port);

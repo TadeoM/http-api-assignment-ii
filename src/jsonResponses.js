@@ -47,161 +47,34 @@ const addUser = (request, response, params) => {
     const responseJSON = {
         message: '',
     }
-    if (!params.name || !param.age) {
+    if (!params.name || !params.age) {
         responseJSON.message = 'Missing params name and/or age.';
         return respondJSON(request, response, 400, responseJSON.message);
     }
 
+    
     const newUser = {
         name: params[0],
         age: params[1],
     };
 
-    if (users.includes(name)) {
-        responseJSON.message = `Updated ${newUser.name}'s age to ${newUser.age}.`
-        users[users.indexOf(name)].age = newUser.age;
+    if (users.hasOwnProperty(newUser.name)) {
         
-        return responseJSON(request,response, 204, newUser);
+        users[newUser.name].age = newUser.age;
+        responseJSON.message = `Updated user.`
+        
+        return respondJSON(request,response, 204, newUser);
     }
     
-    responseJSON.message = `Created new user: ${newUser.name}, age: ${newUser.age}`;
-    users[users.indexOf(name)].name = newUser.name;
-    users[users.indexOf(name)].age = newUser.age;
+    
+    users[newUser.name] = {};
+    users[newUser.name].name = newUser.name;
+    users[newUser.name].age = newUser.age;
+    responseJSON.message = `Created new user.`;
 
-    return respondJSON(request, response, 201, newUser);
+    return respondJSON(request, response, 201, responseJSON);
 };
 
-
-/*const success = (request, response) => {
-    const responseJSON = {
-        message: 'This is a successful response',
-    };
-    if (request.headers.accept === 'text/xml') {
-        let responseXML = '<response>';
-        responseXML = `${responseXML} <message>This is a successful response</message>`;
-        responseXML = `${responseXML} </response>`;  
-        
-        return respondXML(request, response, 200, responseXML);
-    }
-    
-
-    return respondJSON(request, response, 200, responseJSON);
-};
-
-const unauthorized = (request, response, params) => {
-    const responseJSON = {
-        message: 'This is a unauthorized response',
-        id: 'unauthorized',
-    };
-    
-    if(params.loggedIn || params.loggedIn !== true){
-        responseJSON.message = 'Missing loggedIn query parameter set to true';
-        responseJSON.id = 'unauthorized';
-        
-        if (request.headers.accept === 'text/xml') {
-            let responseXML = '<response>';
-            responseXML = `${responseXML} <message>This is an unauthorized response</message>`;
-            responseXML = `${responseXML} <id>unauthorized</id>`;
-            responseXML = `${responseXML} </response>`;  
-
-            return respondXML(request, response, 401, responseXML);
-        }
-        
-        return respondJSON(request, response, 401, responseJSON);
-    }
-    
-    if (request.headers.accept === 'text/xml') {
-        let responseXML = '<response>';
-        responseXML = `${responseXML} <message>This is an unauthorized response</message>`;
-        responseXML = `${responseXML} </response>`;  
-        
-        return respondXML(request, response, 401, responseXML);
-    }
-
-    return respondJSON(request, response, 401, responseJSON);
-};
-
-const forbidden = (request, response) => {
-    const responseJSON = {
-        message: 'This is a forbidden response',
-    };
-    
-    if (request.headers.accept === 'text/xml') {
-        let responseXML = '<response>';
-        responseXML = `${responseXML} <message>This is a forbidden response</message>`;
-        responseXML = `${responseXML} </response>`;  
-        
-        return respondXML(request, response, 403, responseXML);
-    }
-
-    return respondJSON(request, response, 403, responseJSON);
-};
-
-const internal = (request, response) => {
-    const responseJSON = {
-        message: 'This is a internal response',
-    };
-    
-    if (request.headers.accept === 'text/xml') {
-        let responseXML = '<response>';
-        responseXML = `${responseXML} <message>This is an internal response</message>`;
-        responseXML = `${responseXML} </response>`;  
-        
-        return respondXML(request, response, 500, responseXML);
-    }
-
-    return respondJSON(request, response, 500, responseJSON);
-};
-
-const notImplemented = (request, response) => {
-    const responseJSON = {
-        message: 'This is not implemented',
-        id: 'notImplemented',
-    };
-    
-    if (request.headers.accept === 'text/xml') {
-        let responseXML = '<response>';
-        responseXML = `${responseXML} <message>This is not implemented</message>`;
-        responseXML = `${responseXML} <id>notImplemented</id>`;
-        responseXML = `${responseXML} </response>`;  
-        
-        return respondXML(request, response, 501, responseXML);
-    }
-
-    return respondJSON(request, response, 501, responseJSON);
-};
-
-const badRequest = (request, response, params) => {
-    const responseJSON = {
-        message: 'This request does not have the required parameters',
-    };
-    
-    if (!params.valid || params.valid !== true){
-        responseJSON.message = 'Missing valid query parameter set to true';
-        responseJSON.id = 'badRequest';
-        if (request.headers.accept === 'text/xml') {
-            let responseXML = '<response>';
-            responseXML = `${responseXML} <message>This is an unauthorized response</message>`;
-            responseXML = `${responseXML} <id>badRequest</id>`;
-            responseXML = `${responseXML} </response>`;  
-
-            return respondXML(request, response, 401, responseXML);
-        }
-        
-        return respondJSON(request, response, 400, responseJSON);
-    }
-    
-    if (request.headers.accept === 'text/xml') {
-        let responseXML = '<response>';
-        responseXML = `${responseXML} <message>This is not implemented</message>`;
-        responseXML = `${responseXML} </response>`;  
-        
-        return respondXML(request, response, 200, responseXML);
-    }
-    
-    return respondJSON(request, response, 200, responseJSON);
-};
-*/
 const notFound = (request, response) => {
     const responseJSON = {
         message: 'The page you are looking for is not found.',
