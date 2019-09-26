@@ -201,7 +201,7 @@ const badRequest = (request, response, params) => {
     
     return respondJSON(request, response, 200, responseJSON);
 };
-
+*/
 const notFound = (request, response) => {
     const responseJSON = {
         message: 'The page you are looking for is not found.',
@@ -217,7 +217,7 @@ const notFound = (request, response) => {
     }
 
     return respondJSON(request, response, 404, responseJSON);
-};*/
+};
 
 module.exports = {
     getUsers,
@@ -231,6 +231,6 @@ module.exports = {
     forbidden,
     notFound,
     internal,
-    notImplemented,
-    notFound,*/
+    notImplemented,*/
+    notFound,
 };

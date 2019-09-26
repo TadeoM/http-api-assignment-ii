@@ -9,6 +9,7 @@
     <script type="text/babel">
         let getUserForm = '';
         let addUserForm = '';
+        let pageSelected = '';
 
         // so this takes whatever xhr we got from sendajax, and then interprets it
         // what does the JSON.parse do, does it call something in the other js files?
@@ -62,16 +63,26 @@
             const getButton = document.querySelector('#nameForm')[2];
             const addButton = document.querySelector('#userForm')[2];
             
-            
             getButton.addEventListener('click', () => 
             {
                 getUserForm = document.querySelector('#userForm');
+                pageSelected = document.querySelector('#urlField').value;
                 sendAjax(pageSelected, getUserForm[1].value);
             });
             
             addButton.addEventListener('click', () => 
             {
                 addUserForm = document.querySelector('#nameForm');
+                pageSelected = `/addUser`;
+                if(document.querySelector('#nameField').value !== '' && document.querySelector('#ageField').value !== ''){
+                    pageSelected += `?name=${document.querySelector('#nameField').value}+age=${document.querySelector('#ageField').value}`;
+                }
+                else if(document.querySelector('#nameField').value !== '') {
+                    pageSelected += `?name=${document.querySelector('#nameField').value}`;
+                }
+                else if(document.querySelector('#ageField').value !== '') {
+                    pageSelected += `?age=${document.querySelector('#ageField').value}`;
+                }
                 sendAjax(pageSelected, 'POST');
             });
         };

@@ -19,7 +19,6 @@ const urlStruct = {
         '/notImplemented': jsonHandler.notImplemented,*/
         '/getUsers': jsonHandler.getUsers,
         '/notReal': jsonHandler.notReal,
-        notFound: jsonHandler.notFound,
     },
     'HEAD': {
         '/getUsers': jsonHandler.getUsersMeta,
@@ -34,6 +33,7 @@ const urlStruct = {
 const onRequest = (request, response) => {
     const parsedUrl = url.parse(request.url);
     const params = query.parse(parsedUrl.query);
+    console.dir(params);
 
     if (urlStruct[request.method][parsedUrl.pathname]){
         urlStruct[request.method][parsedUrl.pathname](request,response, params);
