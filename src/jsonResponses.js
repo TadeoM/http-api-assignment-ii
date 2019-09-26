@@ -36,7 +36,7 @@ const notReal = (request, response) => {
         message: 'The page you are looking for was not found',
     }
 
-    return responseJSON(request, response, 404, responseJSON);
+    return respondJSON(request, response, 404, responseJSON);
 };
 
 const notRealMeta = (request, response) => {

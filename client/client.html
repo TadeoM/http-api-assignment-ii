@@ -13,7 +13,7 @@
         const parseJSON = (xhr, content) => {
             //parse response (obj will be empty in a 204 updated)
             const obj = JSON.parse(xhr.response);
-            console.dir(obj);
+            //console.dir(obj);
 
             //if message in response, add to screen
             if(obj.message) {
@@ -25,7 +25,7 @@
             //if users in response, add to screen
             if(obj.users) {
                 const userList = document.createElement('p');
-                const users = JSON.stringify(obj.users);
+                let users = JSON.stringify(obj.users);
                 userList.textContent = users;
                 content.appendChild(userList);
             }
@@ -52,12 +52,19 @@
               content.innerHTML = `Error code not implemented by client.`;
               break;
           }
-          //parse response 
-          parseJSON(xhr, content);
+            console.log(JSON.parse(xhr.response));
+            if (xhr.response !== "")
+                parseJSON(xhr, content);
         };
 
-        const getAjax = (url, type) => {
+        const getAjax = (e, userForm) => {
+            
+            //grab the form's name and age fields so we can check user input
+            const url = userForm.querySelector('#urlField').value;
+            const type = userForm.querySelector('#methodSelect').value;
+            
             const xhr = new XMLHttpRequest(); 
+            
             xhr.open(type, url); 
             xhr.setRequestHeader ("Accept", 'type/JSON');    
 
@@ -113,24 +120,11 @@
               //return false to prevent the browser from trying to change page
               return false;
             };
-
-        const init = () =>{
-            const nameForm = document.querySelector('#nameForm');
-            const userForm = document.querySelector('#userForm');
-            const addUser = (e) => sendPost(e, nameForm);
-            
-            getButton.addEventListener('submit', () => 
-            {
-                getAjax(pageSelected, getUserForm.document.getAttribute('action'));
-            });
-            
-            addButton.addEventListener('submit', addUser);
-        };
         const init = () => {
             //grab form
             const nameForm = document.querySelector('#nameForm');
             const userForm = document.querySelector('#userForm');
-
+            
             //create handler
             const addUser = (e) => sendPost(e, nameForm);
             const getUser = (e) => getAjax(e, userForm);
@@ -139,6 +133,7 @@
             nameForm.addEventListener('submit', addUser);
             userForm.addEventListener('submit', getUser);
         };
+
 
         window.onload = init;
 
