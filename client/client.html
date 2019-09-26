@@ -48,13 +48,18 @@
             case 400: //bad request
               content.innerHTML = `<b>Bad Request</b>`;
               break;
+            case 404:
+                content.innerHTML = `<b>Are you a Game Engine? Cause you UNREAL</b>`;
+                  break;
             default: //any other status code
               content.innerHTML = `Error code not implemented by client.`;
               break;
           }
-            console.log(JSON.parse(xhr.response));
-            if (xhr.response !== "")
+            
+            if (xhr.response !== ""){
+                console.log(JSON.parse(xhr.response));
                 parseJSON(xhr, content);
+            }
         };
 
         const getAjax = (e, userForm) => {
