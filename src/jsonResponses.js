@@ -54,8 +54,8 @@ const addUser = (request, response, params) => {
 
     
     const newUser = {
-        name: params[0],
-        age: params[1],
+        name: params.name,
+        age: params.name,
     };
 
     if (users.hasOwnProperty(newUser.name)) {
