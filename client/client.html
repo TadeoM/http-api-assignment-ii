@@ -133,7 +133,7 @@
 
             //create handler
             const addUser = (e) => sendPost(e, nameForm);
-            const getUser = (e) => sendPost(e, userForm);
+            const getUser = (e) => getAjax(e, userForm);
 
             //attach submit event (for clicking submit or hitting enter)
             nameForm.addEventListener('submit', addUser);
